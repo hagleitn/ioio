@@ -28,6 +28,8 @@
  */
 package ioio.lib.api;
 
+import java.util.concurrent.TimeoutException;
+
 import ioio.lib.api.exception.ConnectionLostException;
 
 /**
@@ -286,6 +288,30 @@ public interface PulseInput extends Closeable {
 			ConnectionLostException;
 
 	/**
+	 * Gets the pulse duration in case of pulse measurement mode, or the period
+	 * in case of frequency mode. When scaling is used, this is compensated for
+	 * here, so the duration of a single cycle will be returned.
+	 * <p>
+	 * A call to this method may block until the first data update arrives or
+	 * the time out has been reached. The client may interrupt the calling
+	 * thread.
+	 * 
+	 * @param timeout
+	 *            Maximum amount of the time method may block in seconds.
+	 *            Specifying a timeout of 0 let's the method block until data is
+	 *            received.
+	 * @return The duration, in seconds.
+	 * @throws InterruptedException
+	 *             The calling thread has been interrupted.
+	 * @throws ConnectionLostException
+	 *             The connection with the IOIO has been lost.
+	 * @throws TimeoutException
+	 *             The timeout has expired before any data was received
+	 */
+	float getDuration(float timeout) throws InterruptedException,
+			ConnectionLostException, TimeoutException;
+
+	/**
 	 * Reads a single measurement from the queue. If the queue is empty, will
 	 * block until more data arrives. The calling thread may be interrupted in
 	 * order to abort the call. See interface documentation for further
@@ -304,6 +330,31 @@ public interface PulseInput extends Closeable {
 			ConnectionLostException;
 
 	/**
+	 * Reads a single measurement from the queue. If the queue is empty, will
+	 * block until more data arrives or the timeout expires. The calling thread
+	 * may be interrupted in order to abort the call. See interface
+	 * documentation for further explanation regarding the read queue.
+	 * <p>
+	 * This method may not be used if the interface has was opened in frequency
+	 * mode.
+	 * 
+	 * @param timeout
+	 *            Maximum amount of the time method may block in seconds.
+	 *            Specifying a timeout of 0 let's the method block until data is
+	 *            received.
+	 * @return The duration, in seconds.
+	 * @throws InterruptedException
+	 *             The calling thread has been interrupted.
+	 * @throws ConnectionLostException
+	 *             The connection with the IOIO has been lost.
+	 * @throws TimeoutException
+	 *             The timeout has expired before any data was received
+	 */
+	public float waitPulseGetDuration(float timeout)
+			throws InterruptedException, ConnectionLostException,
+			TimeoutException;
+
+	/**
 	 * Gets the momentary frequency of the measured signal. When scaling is
 	 * used, this is compensated for here, so the true frequency of the signal
 	 * will be returned.
@@ -319,4 +370,28 @@ public interface PulseInput extends Closeable {
 	 */
 	public float getFrequency() throws InterruptedException,
 			ConnectionLostException;
+
+	/**
+	 * Gets the momentary frequency of the measured signal. When scaling is
+	 * used, this is compensated for here, so the true frequency of the signal
+	 * will be returned.
+	 * <p>
+	 * The first call to this method may block shortly until the first data
+	 * update arrives or the timeout expires. The client may interrupt the
+	 * calling thread.
+	 * 
+	 * @param timeout
+	 *            Maximum amount of the time method may block in seconds.
+	 *            Specifying a timeout of 0 let's the method block until data is
+	 *            received.
+	 * @return The frequency, in Hz.
+	 * @throws InterruptedException
+	 *             The calling thread has been interrupted.
+	 * @throws ConnectionLostException
+	 *             The connection with the IOIO has been lost.
+	 * @throws TimeoutException
+	 *             The timeout has expired before any data was received
+	 */
+	public float getFrequency(float timeout) throws InterruptedException,
+			ConnectionLostException, TimeoutException;
 }

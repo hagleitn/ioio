@@ -6,6 +6,7 @@ import ioio.lib.impl.IncomingState.DataModuleListener;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.TimeoutException;
 
 public class IncapImpl extends AbstractPin implements DataModuleListener,
 		PulseInput {
@@ -28,39 +29,78 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 		timeBase_ = 1.0f / (scale * clockRate);
 		doublePrecision_ = doublePrecision;
 	}
-
+	
 	@Override
 	public float getFrequency() throws InterruptedException,
 			ConnectionLostException {
+		try {
+			return getFrequency(0);
+		} catch (TimeoutException e) {
+			assert false : "Wait of time 0 should not time out";
+			return 0;
+		}
+	}
+
+	@Override
+	public float getFrequency(float timeout) throws InterruptedException,
+			ConnectionLostException, TimeoutException {
 		if (mode_ != PulseMode.FREQ && mode_ != PulseMode.FREQ_SCALE_4
 				&& mode_ != PulseMode.FREQ_SCALE_16) {
 			throw new IllegalStateException(
 					"Cannot query frequency when module was not opened in frequency mode.");
 		}
-		return 1.0f / getDuration();
+		return 1.0f / getDuration(timeout);
+	}
+	
+	@Override
+	public float getDuration() throws InterruptedException,
+			ConnectionLostException {
+		try {
+			return getDuration(0);
+		} catch (TimeoutException e) {
+			assert false : "Wait of time 0 should not time out";
+			return 0;
+		}
 	}
 
 	@Override
-	public synchronized float getDuration() throws InterruptedException,
-			ConnectionLostException {
+	public synchronized float getDuration(float timeout) throws InterruptedException,
+			ConnectionLostException, TimeoutException {
 		checkState();
-		while (!valid_) {
-			wait();
-			checkState();
+		if (!valid_) {
+			wait(getMilliseconds(timeout), getRemainingNanoseconds(timeout));
+			if (!valid_) {
+				throw new TimeoutException();
+			}
 		}
+		checkState();
 		return timeBase_ * lastDuration_;
 	}
 
 	@Override
-	public synchronized float waitPulseGetDuration()
+	public float waitPulseGetDuration()
 			throws InterruptedException, ConnectionLostException {
+		try {
+			return waitPulseGetDuration(0);
+		} catch (TimeoutException e) {
+			assert false : "Wait of time 0 must not time out";
+			return 0;
+		}
+	}
+	
+	@Override
+	public synchronized float waitPulseGetDuration(float timeout)
+			throws InterruptedException, ConnectionLostException, TimeoutException {
 		if (mode_ != PulseMode.POSITIVE && mode_ != PulseMode.NEGATIVE) {
 			throw new IllegalStateException(
 					"Cannot wait for pulse when module was not opened in pulse mode.");
 		}
 		checkState();
-		while (pulseQueue_.isEmpty() && state_ == State.OPEN) {
-			wait();
+		if (pulseQueue_.isEmpty() && state_ == State.OPEN) {
+			wait(getMilliseconds(timeout), getRemainingNanoseconds(timeout));
+			if (pulseQueue_.isEmpty()) {
+				throw new TimeoutException();
+			}
 		}
 		checkState();
 		return timeBase_ * pulseQueue_.remove();
@@ -75,6 +115,15 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 		pulseQueue_.add(lastDuration_);
 		valid_ = true;
 		notifyAll();
+	}
+	
+	private static long getMilliseconds(float seconds) {
+		return (long) (seconds * 1000);
+	}
+	
+	private static int getRemainingNanoseconds(float seconds) {
+		float millis = seconds * 1000;
+		return (int) ((millis - (int)millis)*1000000);
 	}
 
 	private static long ByteArrayToLong(byte[] data, int size) {

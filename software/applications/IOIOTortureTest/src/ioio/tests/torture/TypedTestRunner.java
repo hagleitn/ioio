@@ -1,5 +1,7 @@
 package ioio.tests.torture;
 
+import java.util.concurrent.TimeoutException;
+
 import ioio.lib.api.exception.ConnectionLostException;
 
 class TypedTestRunner<E> implements TestRunner {
@@ -12,7 +14,7 @@ class TypedTestRunner<E> implements TestRunner {
 	}
 	
 	@Override
-	public void run() throws ConnectionLostException, InterruptedException {
+	public void run() throws ConnectionLostException, InterruptedException, TimeoutException {
 		agg_.addResult(test_.run());
 	}
 

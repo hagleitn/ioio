@@ -2,6 +2,7 @@ package ioio.tests.torture;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 
 import android.util.Log;
 import ioio.lib.api.exception.ConnectionLostException;
@@ -40,7 +41,11 @@ class TestThread extends Thread {
 				Log.i("TortureTest",
 						"IOIO connection lost, TestThread [" + getId() + "] exiting.");
 				break;
-			} finally {
+			} catch (TimeoutException e) {
+				Log.i("TortureTest",
+						"Timeout received, TestThread [" + getId() + "] exiting.");
+			}
+			finally {
 				t.cancel();
 			}
 		}
