@@ -79,7 +79,9 @@ const BYTE incoming_arg_size[MESSAGE_TYPE_LIMIT] = {
   sizeof(ICSP_PROG_EXIT_ARGS),
   sizeof(ICSP_CONFIG_ARGS),
   sizeof(INCAP_CONFIG_ARGS),
-  sizeof(SET_PIN_INCAP_ARGS)
+  sizeof(SET_PIN_INCAP_ARGS),
+  sizeof(SET_PING_ARGS),
+  sizeof(READ_PING_ARGS)
   // BOOKMARK(add_feature): Add sizeof (argument for incoming message).
   // Array is indexed by message type enum.
 };
@@ -113,7 +115,9 @@ const BYTE outgoing_arg_size[MESSAGE_TYPE_LIMIT] = {
   sizeof(RESERVED_ARGS),
   sizeof(ICSP_CONFIG_ARGS),
   sizeof(INCAP_STATUS_ARGS),
-  sizeof(INCAP_REPORT_ARGS)
+  sizeof(INCAP_REPORT_ARGS),
+  sizeof(PING_DATA_ARGS),
+  sizeof(PING_DATA_ARGS)
 
   // BOOKMARK(add_feature): Add sizeof (argument for outgoing message).
   // Array is indexed by message type enum.
@@ -255,6 +259,16 @@ static BOOL MessageDone() {
       CHECK(rx_msg.args.set_pin_digital_in.pin < NUM_PINS);
       CHECK(rx_msg.args.set_pin_digital_in.pull < 3);
       SetPinDigitalIn(rx_msg.args.set_pin_digital_in.pin, rx_msg.args.set_pin_digital_in.pull);
+      break;
+
+    case SET_PING_PIN:
+      CHECK(rx_msg.args.set_ping.pin < NUM_PINS);
+      SetPingPin(rx_msg.args.set_ping.pin);
+      break;
+
+    case READ_PING_PIN:
+      CHECK(rx_msg.args.read_ping.pin < NUM_PINS);
+      ReadPingPin(rx_msg.args.read_ping.pin);
       break;
 
     case SET_CHANGE_NOTIFY:

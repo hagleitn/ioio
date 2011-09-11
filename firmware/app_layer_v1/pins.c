@@ -304,6 +304,14 @@ void PinSetLat(int pin, int val) {
   }
 }
 
+volatile unsigned long *PinGetPortPtr(int pin) {
+    return port_info[pin].port;
+}
+
+unsigned long PinGetPortMask(int pin) {
+    return port_info[pin].pos_mask;
+}
+
 int PinGetPort(int pin) {
   const PORT_INFO* info = &port_info[pin];
   return (*info->port & info->pos_mask) != 0;

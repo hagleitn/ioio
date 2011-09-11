@@ -42,7 +42,14 @@
 #include "GenericTypeDefs.h"
 #endif
 
-#if defined(__C30__) 
+#if defined(__C30__)
+        #define DelayUs(x)			\
+	{								\
+		unsigned long _dcnt;		\
+		_dcnt=x*((unsigned long)(0.000001/(1.0/GetInstructionClock())/6));	\
+		while(_dcnt--);				\
+	}
+
 	#define Delay10us(x)			\
 	{								\
 		unsigned long _dcnt;		\
@@ -63,6 +70,7 @@
 		}                           \
 	}
 #elif defined(__PIC32MX__)
+void DelayUs(DWORD dwCount);
 void Delay10us(DWORD dwCount);
 void DelayMs(WORD ms);
 #endif

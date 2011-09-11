@@ -83,6 +83,19 @@ typedef struct PACKED {
   BYTE pin : 6;
 } SET_PIN_DIGITAL_IN_ARGS;
 
+typedef struct PACKED {
+    BYTE pin;
+} SET_PING_ARGS;
+
+typedef struct PACKED {
+    BYTE pin;
+} READ_PING_ARGS;
+
+typedef struct PACKED {
+    BYTE pin;
+    DWORD time;
+} PING_DATA_ARGS;
+
 // set change notify
 typedef struct PACKED {
   BYTE cn : 1;
@@ -402,6 +415,8 @@ typedef struct PACKED {
     ICSP_CONFIG_ARGS                         icsp_config;
     INCAP_CONFIG_ARGS                        incap_config;
     SET_PIN_INCAP_ARGS                       set_pin_incap;
+    SET_PING_ARGS                            set_ping;
+    READ_PING_ARGS                           read_ping;
     // BOOKMARK(add_feature): Add argument struct to the union.
   } args;
   BYTE __vabuf[64];  // buffer for var args. never access directly!
@@ -429,6 +444,7 @@ typedef struct PACKED {
     ICSP_REPORT_RX_STATUS_ARGS              icsp_report_rx_status;
     INCAP_STATUS_ARGS                       incap_status;
     INCAP_REPORT_ARGS                       incap_report;
+    PING_DATA_ARGS                          ping_data;
     // BOOKMARK(add_feature): Add argument struct to the union.
   } args;
 } OUTGOING_MESSAGE;
@@ -489,6 +505,10 @@ typedef enum {
   INCAP_STATUS                        = 0x1B,
   SET_PIN_INCAP                       = 0x1C,
   INCAP_REPORT                        = 0x1C,
+  SET_PING_PIN                        = 0x1D,
+  READ_PING_PIN                       = 0x1E,
+  PING_RESULT                         = 0x1E,
+
 
   // BOOKMARK(add_feature): Add new message type to enum.
   MESSAGE_TYPE_LIMIT

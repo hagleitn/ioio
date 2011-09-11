@@ -59,6 +59,8 @@ void PinSetTris(int pin, int val);
 void PinSetAnsel(int pin, int val);
 void PinSetLat(int pin, int val);
 int PinGetPort(int pin);
+volatile unsigned long *PinGetPortPtr(int pin);
+unsigned long PinGetPortMask(int pin);
 void PinSetOdc(int pin, int val);
 void PinSetCnen(int pin, int cnen);
 void PinSetCnforce(int pin);

@@ -104,6 +104,20 @@ void SetPinDigitalIn(int pin, int pull) {
   PinSetTris(pin, 1);
 }
 
+void SetPingPin(int pin) {
+  log_printf("SetPingPin(%d)", pin);
+  SAVE_PIN_FOR_LOG(pin);
+  ADCSetScan(pin, 0);
+  PinSetAnsel(pin, 0);
+  PinSetRpor(pin, 0);
+  PinSetCnen(pin, 0);
+  PinSetCnpu(pin, 0);
+  PinSetCnpd(pin, 0);
+  PinSetLat(pin, 0);
+  PinSetOdc(pin, 0);
+  PinSetTris(pin, 0);
+}
+
 void SetPinPwm(int pin, int pwm_num, int enable) {
   log_printf("SetPinPwm(%d, %d)", pin, pwm_num);
   SAVE_PIN_FOR_LOG(pin);
