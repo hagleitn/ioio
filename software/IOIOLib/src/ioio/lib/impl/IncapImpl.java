@@ -64,8 +64,9 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 	}
 
 	@Override
-	public synchronized float getDuration(float timeout) throws InterruptedException,
-			ConnectionLostException, TimeoutException {
+	public synchronized float getDuration(float timeout)
+			throws InterruptedException, ConnectionLostException,
+			TimeoutException {
 		checkState();
 		if (!valid_) {
 			wait(getMilliseconds(timeout), getRemainingNanoseconds(timeout));
@@ -78,8 +79,8 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 	}
 
 	@Override
-	public float waitPulseGetDuration()
-			throws InterruptedException, ConnectionLostException {
+	public float waitPulseGetDuration() throws InterruptedException,
+			ConnectionLostException {
 		try {
 			return waitPulseGetDuration(0);
 		} catch (TimeoutException e) {
@@ -90,7 +91,8 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 	
 	@Override
 	public synchronized float waitPulseGetDuration(float timeout)
-			throws InterruptedException, ConnectionLostException, TimeoutException {
+			throws InterruptedException, ConnectionLostException,
+			TimeoutException {
 		if (mode_ != PulseMode.POSITIVE && mode_ != PulseMode.NEGATIVE) {
 			throw new IllegalStateException(
 					"Cannot wait for pulse when module was not opened in pulse mode.");
@@ -123,7 +125,7 @@ public class IncapImpl extends AbstractPin implements DataModuleListener,
 	
 	private static int getRemainingNanoseconds(float seconds) {
 		float millis = seconds * 1000;
-		return (int) ((millis - (int)millis)*1000000);
+		return (int) ((millis - (int) millis) * 1000000);
 	}
 
 	private static long ByteArrayToLong(byte[] data, int size) {

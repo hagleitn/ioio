@@ -44,79 +44,81 @@ import java.util.Set;
 import android.util.Log;
 
 public class IOIOProtocol {
-	static final int HARD_RESET                          = 0x00;
-	static final int ESTABLISH_CONNECTION                = 0x00;
-	static final int SOFT_RESET                          = 0x01;
-	static final int CHECK_INTERFACE                     = 0x02;
-	static final int CHECK_INTERFACE_RESPONSE            = 0x02;
-	static final int SET_PIN_DIGITAL_OUT                 = 0x03;
-	static final int SET_DIGITAL_OUT_LEVEL               = 0x04;
-	static final int REPORT_DIGITAL_IN_STATUS            = 0x04;
-	static final int SET_PIN_DIGITAL_IN                  = 0x05;
-	static final int REPORT_PERIODIC_DIGITAL_IN_STATUS   = 0x05;
-	static final int SET_CHANGE_NOTIFY                   = 0x06;
-	static final int REGISTER_PERIODIC_DIGITAL_SAMPLING  = 0x07;
-	static final int SET_PIN_PWM                         = 0x08;
-	static final int SET_PWM_DUTY_CYCLE                  = 0x09;
-	static final int SET_PWM_PERIOD                      = 0x0A;
-	static final int SET_PIN_ANALOG_IN                   = 0x0B;
-	static final int REPORT_ANALOG_IN_STATUS             = 0x0B;
-	static final int SET_ANALOG_IN_SAMPLING              = 0x0C;
-	static final int REPORT_ANALOG_IN_FORMAT             = 0x0C;
-	static final int UART_CONFIG                         = 0x0D;
-	static final int UART_STATUS                         = 0x0D;
-	static final int UART_DATA                           = 0x0E;
-	static final int SET_PIN_UART                        = 0x0F;
-	static final int UART_REPORT_TX_STATUS               = 0x0F;
-	static final int SPI_CONFIGURE_MASTER                = 0x10;
-	static final int SPI_STATUS                          = 0x10;
-	static final int SPI_MASTER_REQUEST                  = 0x11;
-	static final int SPI_DATA                            = 0x11;
-	static final int SET_PIN_SPI                         = 0x12;
-	static final int SPI_REPORT_TX_STATUS                = 0x12;
-	static final int I2C_CONFIGURE_MASTER                = 0x13;
-	static final int I2C_STATUS                          = 0x13;
-	static final int I2C_WRITE_READ                      = 0x14;
-	static final int I2C_RESULT                          = 0x14;
-	static final int I2C_REPORT_TX_STATUS                = 0x15;
-	static final int ICSP_SIX                            = 0x16;
-	static final int ICSP_REPORT_RX_STATUS               = 0x16;
-	static final int ICSP_REGOUT                         = 0x17;
-	static final int ICSP_RESULT                         = 0x17;
-	static final int ICSP_PROG_ENTER                     = 0x18;
-	static final int ICSP_PROG_EXIT                      = 0x19;
-	static final int ICSP_CONFIG                         = 0x1A;
-	static final int INCAP_CONFIGURE                     = 0x1B;
-	static final int INCAP_STATUS                        = 0x1B;
-	static final int SET_PIN_INCAP                       = 0x1C;
-	static final int INCAP_REPORT                        = 0x1C;
+	static final int HARD_RESET = 0x00;
+	static final int ESTABLISH_CONNECTION = 0x00;
+	static final int SOFT_RESET = 0x01;
+	static final int CHECK_INTERFACE = 0x02;
+	static final int CHECK_INTERFACE_RESPONSE = 0x02;
+	static final int SET_PIN_DIGITAL_OUT = 0x03;
+	static final int SET_DIGITAL_OUT_LEVEL = 0x04;
+	static final int REPORT_DIGITAL_IN_STATUS = 0x04;
+	static final int SET_PIN_DIGITAL_IN = 0x05;
+	static final int REPORT_PERIODIC_DIGITAL_IN_STATUS = 0x05;
+	static final int SET_CHANGE_NOTIFY = 0x06;
+	static final int REGISTER_PERIODIC_DIGITAL_SAMPLING = 0x07;
+	static final int SET_PIN_PWM = 0x08;
+	static final int SET_PWM_DUTY_CYCLE = 0x09;
+	static final int SET_PWM_PERIOD = 0x0A;
+	static final int SET_PIN_ANALOG_IN = 0x0B;
+	static final int REPORT_ANALOG_IN_STATUS = 0x0B;
+	static final int SET_ANALOG_IN_SAMPLING = 0x0C;
+	static final int REPORT_ANALOG_IN_FORMAT = 0x0C;
+	static final int UART_CONFIG = 0x0D;
+	static final int UART_STATUS = 0x0D;
+	static final int UART_DATA = 0x0E;
+	static final int SET_PIN_UART = 0x0F;
+	static final int UART_REPORT_TX_STATUS = 0x0F;
+	static final int SPI_CONFIGURE_MASTER = 0x10;
+	static final int SPI_STATUS = 0x10;
+	static final int SPI_MASTER_REQUEST = 0x11;
+	static final int SPI_DATA = 0x11;
+	static final int SET_PIN_SPI = 0x12;
+	static final int SPI_REPORT_TX_STATUS = 0x12;
+	static final int I2C_CONFIGURE_MASTER = 0x13;
+	static final int I2C_STATUS = 0x13;
+	static final int I2C_WRITE_READ = 0x14;
+	static final int I2C_RESULT = 0x14;
+	static final int I2C_REPORT_TX_STATUS = 0x15;
+	static final int ICSP_SIX = 0x16;
+	static final int ICSP_REPORT_RX_STATUS = 0x16;
+	static final int ICSP_REGOUT = 0x17;
+	static final int ICSP_RESULT = 0x17;
+	static final int ICSP_PROG_ENTER = 0x18;
+	static final int ICSP_PROG_EXIT = 0x19;
+	static final int ICSP_CONFIG = 0x1A;
+	static final int INCAP_CONFIGURE = 0x1B;
+	static final int INCAP_STATUS = 0x1B;
+	static final int SET_PIN_INCAP = 0x1C;
+	static final int INCAP_REPORT = 0x1C;
+	static final int SET_PING_PIN = 0x1D;
+	static final int READ_PING_PIN = 0x1E;
+	static final int PING_RESULT = 0x1E;
 
-	static final int[] SCALE_DIV = new int[] {
-		0x1F,  // 31.25
-		0x1E,  // 35.714
-		0x1D,  // 41.667
-		0x1C,  // 50
-		0x1B,  // 62.5
-		0x1A,  // 83.333
-		0x17,  // 125
-		0x16,  // 142.857
-		0x15,  // 166.667
-		0x14,  // 200
-		0x13,  // 250
-		0x12,  // 333.333
-		0x0F,  // 500
-		0x0E,  // 571.429
-		0x0D,  // 666.667
-		0x0C,  // 800
-		0x0B,  // 1000
-		0x0A,  // 1333.333
-		0x07,  // 2000
-		0x06,  // 2285.714
-		0x05,  // 2666.667
-		0x04,  // 3200
-		0x03,  // 4000
-		0x02,  // 5333.333
-		0x01   // 8000
+	static final int[] SCALE_DIV = new int[] { 0x1F, // 31.25
+			0x1E, // 35.714
+			0x1D, // 41.667
+			0x1C, // 50
+			0x1B, // 62.5
+			0x1A, // 83.333
+			0x17, // 125
+			0x16, // 142.857
+			0x15, // 166.667
+			0x14, // 200
+			0x13, // 250
+			0x12, // 333.333
+			0x0F, // 500
+			0x0E, // 571.429
+			0x0D, // 666.667
+			0x0C, // 800
+			0x0B, // 1000
+			0x0A, // 1333.333
+			0x07, // 2000
+			0x06, // 2285.714
+			0x05, // 2666.667
+			0x04, // 3200
+			0x03, // 4000
+			0x02, // 5333.333
+			0x01 // 8000
 	};
 
 	enum PwmScale {
@@ -136,7 +138,7 @@ public class IOIOProtocol {
 
 	private void writeByte(int b) {
 		assert (b >= 0 && b < 256);
-//		Log.v("IOIOProtocol", "sending: 0x" + Integer.toHexString(b));
+		// Log.v("IOIOProtocol", "sending: 0x" + Integer.toHexString(b));
 		buf_[pos_++] = (byte) b;
 	}
 
@@ -261,6 +263,18 @@ public class IOIOProtocol {
 		writeByte((pin << 2)
 				| (mode == DigitalOutput.Spec.Mode.OPEN_DRAIN ? 0x01 : 0x00)
 				| (value ? 0x02 : 0x00));
+		flush();
+	}
+
+	synchronized public void setPingPin(int pin) throws IOException {
+		writeByte(SET_PING_PIN);
+		writeByte(pin);
+		flush();
+	}
+
+	synchronized public void readPingPin(int pin) throws IOException {
+		writeByte(READ_PING_PIN);
+		writeByte(pin);
 		flush();
 	}
 
@@ -498,6 +512,8 @@ public class IOIOProtocol {
 		public void handleIncapClose(int incapNum);
 
 		public void handleIncapOpen(int incapNum);
+
+		public void handlePingInput(int pin, int time);
 	}
 
 	class IncomingThread extends Thread {
@@ -530,8 +546,8 @@ public class IOIOProtocol {
 				int b = in_.read();
 				if (b == -1)
 					throw new IOException("Unexpected stream closure");
-//				 Log.v("IOIOProtocol", "received: 0x" +
-//				 Integer.toHexString(b));
+				// Log.v("IOIOProtocol", "received: 0x" +
+				// Integer.toHexString(b));
 				return b;
 			} catch (IOException e) {
 				Log.i("IOIOProtocol", "IOIO disconnected");
@@ -556,7 +572,8 @@ public class IOIOProtocol {
 			byte[] data = new byte[256];
 			try {
 				while (true) {
-					switch (arg1 = readByte()) {
+					arg1 = readByte();
+					switch (arg1) {
 					case ESTABLISH_CONNECTION:
 						if (readByte() != 'I' || readByte() != 'O'
 								|| readByte() != 'I' || readByte() != 'O') {
@@ -732,7 +749,7 @@ public class IOIOProtocol {
 							handler_.handleIcspClose();
 						}
 						break;
-						
+
 					case INCAP_STATUS:
 						arg1 = readByte();
 						if ((arg1 & 0x80) != 0) {
@@ -741,7 +758,7 @@ public class IOIOProtocol {
 							handler_.handleIncapClose(arg1 & 0x0F);
 						}
 						break;
-						
+
 					case INCAP_REPORT:
 						arg1 = readByte();
 						size = arg1 >> 6;
@@ -750,6 +767,17 @@ public class IOIOProtocol {
 						}
 						readBytes(size, data);
 						handler_.handleIncapReport(arg1 & 0x0F, size, data);
+						break;
+
+					case PING_RESULT:
+						int pin = readByte();
+						int tmp = 0;
+						int time = 0;
+						for (int i = 0; i < 4; ++i) {
+							tmp = readByte();
+							time |= tmp << (i * 8);
+						}
+						handler_.handlePingInput(pin, time);
 						break;
 
 					default:

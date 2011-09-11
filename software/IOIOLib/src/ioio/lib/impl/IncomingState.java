@@ -444,17 +444,22 @@ public class IncomingState implements IncomingHandler {
 		}
 	}
 
-//	private void logMethod(String name, Object... args) {
-//		StringBuffer msg = new StringBuffer(name);
-//		msg.append('(');
-//		for (int i = 0; i < args.length; ++i) {
-//			if (i != 0) {
-//				msg.append(", ");
-//			}
-//			msg.append(args[i]);
-//		}
-//		msg.append(')');
-//
-//		Log.v("IncomingState", msg.toString());
-//	}
+	@Override
+	public void handlePingInput(int pin, int time) {
+		intputPinStates_[pin].setValue(time);
+	}
+
+	// private void logMethod(String name, Object... args) {
+	// StringBuffer msg = new StringBuffer(name);
+	// msg.append('(');
+	// for (int i = 0; i < args.length; ++i) {
+	// if (i != 0) {
+	// msg.append(", ");
+	// }
+	// msg.append(args[i]);
+	// }
+	// msg.append(')');
+	//
+	// Log.v("IncomingState", msg.toString());
+	// }
 }

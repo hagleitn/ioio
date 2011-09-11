@@ -35,6 +35,7 @@ import ioio.lib.api.DigitalInput.Spec.Mode;
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.IcspMaster;
+import ioio.lib.api.PingPin;
 import ioio.lib.api.PulseInput;
 import ioio.lib.api.PulseInput.ClockRate;
 import ioio.lib.api.PulseInput.PulseMode;
@@ -318,6 +319,24 @@ public class IOIOImpl implements IOIO, DisconnectListener {
 			ioio.lib.api.DigitalOutput.Spec.Mode mode, boolean startValue)
 			throws ConnectionLostException {
 		return openDigitalOutput(new DigitalOutput.Spec(pin, mode), startValue);
+	}
+
+	@Override
+	public PingPin openPingInput(int pin) throws ConnectionLostException {
+		checkState();
+		PinFunctionMap.checkValidPin(pin);
+		checkPinFree(pin);
+		PingPinImpl result = new PingPinImpl(this, pin);
+		openPins_[pin] = true;
+		incomingState_.addInputPinListener(pin, result);
+		try {
+			protocol_.setPingPin(pin);
+		} catch (IOException e) {
+			result.close();
+		}
+
+		// PingPinImpl result = new PingPinImpl(this, pin);
+		return result;
 	}
 
 	@Override

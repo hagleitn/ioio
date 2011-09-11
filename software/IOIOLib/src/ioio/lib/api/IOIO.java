@@ -412,8 +412,7 @@ public interface IOIO {
 	 */
 	public PulseInput openPulseInput(DigitalInput.Spec spec,
 			PulseInput.ClockRate rate, PulseInput.PulseMode mode,
-			boolean doublePrecision)
-			throws ConnectionLostException;
+			boolean doublePrecision) throws ConnectionLostException;
 
 	/**
 	 * Shorthand for openPulseInput(new DigitalInput.Spec(pin), rate, mode,
@@ -423,7 +422,8 @@ public interface IOIO {
 	 * @see #openPulseInput(ioio.lib.api.DigitalInput.Spec,
 	 *      ioio.lib.api.PulseInput.ClockRate.RATE_16MHz, PulseMode, boolean)
 	 */
-	public PulseInput openPulseInput(int pin, PulseMode mode) throws ConnectionLostException;
+	public PulseInput openPulseInput(int pin, PulseMode mode)
+			throws ConnectionLostException;
 
 	/**
 	 * Open a UART module, enabling a bulk transfer of byte buffers.
@@ -563,7 +563,7 @@ public interface IOIO {
 			int[] slaveSelect, SpiMaster.Rate rate)
 			throws ConnectionLostException;
 
-	/**
+/**
 	 * Shorthand for {@link #openSpiMaster(ioio.lib.api.DigitalInput.Spec, ioio.lib.api.DigitalOutput.Spec, ioio.lib.api.DigitalOutput.Spec, ioio.lib.api.DigitalOutput.Spec[], ioio.lib.api.SpiMaster.Config),
 	 * where the MISO pins is opened with pull up, and the other pins are open
 	 * with the default modes and default configuration values are used.
@@ -635,4 +635,6 @@ public interface IOIO {
 	 *             method.
 	 */
 	public IcspMaster openIcspMaster() throws ConnectionLostException;
+
+	public PingPin openPingInput(int pin) throws ConnectionLostException;
 }
